@@ -1,13 +1,19 @@
 dataset:
-  name: mvtec #options: [mvtec, btech, folder]
-  format: mvtec
-  path: ./datasets/MVTec
-  category: bottle
-  task: segmentation
-  image_size: 256
-  train_batch_size: 32
-  test_batch_size: 32
-  num_workers: 36
+  name: pcb
+  format: folder
+  path: "./dataset"
+  normal_dir: good # name of the folder containing normal images.
+  abnormal_dir: bad # name of the folder containing abnormal images.
+  normal_test_dir: good
+  task: classification # classification or segmentation
+  mask: null #optional
+  extensions: null
+  split_ratio: 0.2  # ratio of the normal images that will be used to create a test split
+  seed: 0
+  image_size: 512
+  train_batch_size: 8
+  test_batch_size: 8
+  num_workers: 8
   transform_config:
     train: null
     val: null
@@ -35,12 +41,7 @@ model:
 
 metrics:
   image:
-    - F1Score
-    - AUROC
-  pixel:
-    - F1Score
-    - AUROC
-
+    - F1Scorepython tools/inference.py --config anomalib/models/padim/config.yaml --weight_path results/padim/pcb/weights/model.ckpt --image_path dataset/bad/bad.jpg
 project:
   seed: 42
   path: ./results
